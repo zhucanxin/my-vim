@@ -9,7 +9,9 @@
 "自定义普通模式下的控制键，类似win键,默认是反斜杠，现改为空格
 let mapleader=" "   
 syntax on 
+set nocompatible
 set number
+filetype plugin on
 set relativenumber "相对行号
 set cursorline "所在行出现一条横线
 set wrap "超过一行的不超出边界
@@ -121,6 +123,10 @@ Plug 'SirVer/ultisnips'
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'Xuyuanp/nerdtree-git-plugin'
 
+Plug 'vimwiki/vimwiki'
+Plug 'gcmt/wildfire.vim' " in Visual mode, type i' to select all text in '', or type i) i] i} ip
+" Bookmarks
+Plug 'kshenoy/vim-signature'
 " Taglist
 Plug 'majutsushi/tagbar', { 'on': 'TagbarOpenAutoClose' }
 
@@ -156,18 +162,14 @@ Plug 'vim-scripts/indentpython.vim'
 
 " Markdown
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install_sync() }, 'for' :['markdown', 'vim-plug'] }
-Plug 'dhruvasagar/vim-table-mode', { 'on': 'TableModeToggle' }
-Plug 'vimwiki/vimwiki'
+"Plug 'dhruvasagar/vim-table-mode', { 'on': 'TableModeToggle' }
 
-" Bookmarks
-Plug 'kshenoy/vim-signature'
 
 " Other useful utilities
 Plug 'terryma/vim-multiple-cursors'
 Plug 'junegunn/goyo.vim' " distraction free writing mode
 Plug 'tpope/vim-surround' " type ysks' to wrap the word with '' or type cs'` to change 'word' to `word`
 Plug 'godlygeek/tabular' " type ;Tabularize /= to align the =
-Plug 'gcmt/wildfire.vim' " in Visual mode, type i' to select all text in '', or type i) i] i} ip
 Plug 'scrooloose/nerdcommenter' " in <space>cc to comment a line
 
 " Dependencies
