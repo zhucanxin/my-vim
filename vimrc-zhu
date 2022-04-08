@@ -4,7 +4,7 @@
 "牛逼的操作:
 "1. w移动至单词尾，b 往左就是移至上一个单词的词尾。c，changge，修改，cw修改至word尾，ciw光标在词中间时删除整个词并进入插入模式,ci",删除两个引号之间的内容并插入;yi",复制双引号之间的内容;di“。
 "2.f的动作,find,的意思,cf:,删除到找到的地一个冒号为止，同样的是y、d，
-"C+i C+o 光标在前后编辑的位置移动，这个包含了在不同的文件之间的。:%TOhtml  将文件转存为html文件，可以用浏览器打开，并可以再保存为pdf等文件，比较漂亮。没有保存的权限时可以有两个办法，一个是保存到有权限的文件位置，再去复制粘贴，二是用命令:w !sudo tee %。
+"C+i C+o 光标在前后编辑的位置移动，这个包含了在不同的文件之间的。:%TOhtml  将文件转存为html文件，可以用浏览器打开，并可以再保存为pdf等文件，比较漂亮。没有保存的权限时可以有两个办法，一个是保存到有权限的文件位置，再去复制粘贴，二是用命令:w !sudo tee %。C+a 把光标放到数字上后按此键自动增加1,从C+x，自动减去1。
 "我的vim配置
 "自定义普通模式下的控制键，类似win键,默认是反斜杠，现改为空格
 let mapleader=" "   
@@ -25,6 +25,7 @@ set ignorecase "搜索时忽略大小写
 set smartcase "智能选择搜索大小写字母
 set mouse=a "使可以用鼠标操作
 set encoding=utf-8 "使用中文编码
+set scrolloff=5 "上下保持5行的距离
 let &t_ut=''   "使有一些配色方案正常显示
 let &t_SI = "\<ESC>]50;CursorShape=1\x7"
 let &t_SR = "\<ESC>]50;CursorShape=2\x7"
@@ -40,7 +41,10 @@ set autochdir "自动在打开的vim文件的位置使用vim的命令。也就�
 map s <nop> 
 map S :w<CR>
 map Q :q<CR>
-map :sudow :w !sudo tee % "用sudo权限来保存文件
+map <LEADER>o A<ESC>o<ESC> "在普通模式下光标下方插入空白行
+"map <LEADER>O A<ESC>O<ESC> "在普通模式下光标上方插入空白行
+
+map sudow :w !sudo tee % "用sudo权限来保存文件
 "map R :source $MYVIMRC<CR>
 "关于分屏操作
 map si :set splitright<CR>:vsplit<CR> "纵向向右建立分屏，并把光标放在新屏幕
