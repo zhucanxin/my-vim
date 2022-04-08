@@ -1,0 +1,352 @@
+"按键映射 主要有map，noremap，unmap，mapclear四个 命令，并且有四个前缀i,c,n,v修饰 说明
+"
+"nore 表示非递归，见下面的介绍 n 表示在普通模式下生效 v 表示在可视模式下生效 i 表示在插入模式下生效 c 表示在命令行模式下生效 map 表示递归的映射 unmap 表示删除某个映射 mapclear
+"牛逼的操作:
+"1. w移动至单词尾，b 往左就是移至上一个单词的词尾。c，changge，修改，cw修改至word尾，ciw光标在词中间时删除整个词并进入插入模式,ci",删除两个引号之间的内容并插入;yi",复制双引号之间的内容;di“。
+"2.f的动作,find,的意思,cf:,删除到找到的地一个冒号为止，同样的是y、d，
+"C+i C+o 光标在前后编辑的位置移动，这个包含了在不同的文件之间的。:%TOhtml  将文件转存为html文件，可以用浏览器打开，并可以再保存为pdf等文件，比较漂亮。没有保存的权限时可以有两个办法，一个是保存到有权限的文件位置，再去复制粘贴，二是用命令:w !sudo tee %。
+"我的vim配置
+"自定义普通模式下的控制键，类似win键,默认是反斜杠，现改为空格
+let mapleader=" "   
+syntax on 
+set number
+set relativenumber "相对行号
+set cursorline "所在行出现一条横线
+set wrap "超过一行的不超出边界
+set showcmd "普通模式下显示命令
+set wildmenu "在命令行模式下启用增强版的命令补全，tab键
+set hlsearch "高亮搜索项
+"因为上次搜索的高亮下次启动时还会高亮，因此打开文件时运行这个取消高亮命令，exec相当于：命令
+exec "nohlsearch"
+set incsearch "边搜索边高亮
+set ignorecase "搜索时忽略大小写
+set smartcase "智能选择搜索大小写字母
+set mouse=a "使可以用鼠标操作
+set encoding=utf-8 "使用中文编码
+let &t_ut=''   "使有一些配色方案正常显示
+let &t_SI = "\<ESC>]50;CursorShape=1\x7"
+let &t_SR = "\<ESC>]50;CursorShape=2\x7"
+let &t_EI = "\<ESC>]50;CursorShape=0\x7"
+set expandtab "设置插入模式下tab的缩进值
+set tabstop=2
+set shiftwidth=2
+set softtabstop=2
+set laststatus=2
+set autochdir "自动在打开的vim文件的位置使用vim的命令。也就是确保在当前文件所在的目录里执行命令，这个很好吗？我实验了一下，本来就是这样的啊，不用设置就是默认。
+
+"在普通模式下
+map s <nop> 
+map S :w<CR>
+map Q :q<CR>
+map :sudow :w !sudo tee % "用sudo权限来保存文件
+"map R :source $MYVIMRC<CR>
+"关于分屏操作
+map si :set splitright<CR>:vsplit<CR> "纵向向右建立分屏，并把光标放在新屏幕
+"map sn :set nosplitright<CR>:vsplit<CR> "纵向向右建立新分屏，并把光标放在原左边屏幕
+map sd :set splitbelow<CR>:split<CR> "水平向下建立新分屏，并把光标放在下边屏幕
+"map su :set nosplitbelow<CR>:split<CR> "水平向下建立新分屏，并把光标放在原上边屏幕
+"在窗口之间移动
+map <LEADER>h <C-w>h
+map <LEADER>l <C-w>l
+map <LEADER>j <C-w>j
+map <LEADER>k <C-w>k
+"改变分屏之间的比例
+map <LEADER><UP> :res+5<CR>
+map <LEADER><DOWN> :res-5<CR>
+map <LEADER><LEFT> :vertical resize-5<CR>
+map <LEADER><RIGHT> :vertical resize+5<CR>
+"关于横竖屏切换
+map sk <C-w>K
+map sh <C-w>H
+
+"标签页操作
+map tu :tabe<CR>
+map tj :-tabnext<CR>
+map tk :+tabnext<CR>
+
+
+"在插入模式下
+"双击j进入普通模式下
+imap <F10> <ESC>I"
+imap jj <ESC>
+
+"关于LEADER配置
+noremap <LEADER><CR> :nohlsearch<CR>
+noremap n nzz "查找后到后一个单词后将该行居中
+noremap N Nzz
+
+"关于插件的安装和配置
+call plug#begin('~/.vim/plugged')
+"配色方案
+Plug 'conorholyday/vim-snazzy'
+"彩色状态栏，原本我的是中文状态，这个状态栏不知道可不可以自定义？
+Plug 'vim-airline/vim-airline'
+" The default plugin directory will be as follows:
+"   - Vim (Linux/macOS): '~/.vim/plugged'
+"   - Vim (Windows): '~/vimfiles/plugged'
+"   - Neovim (Linux/macOS/Windows): stdpath('data') . '/plugged'
+" You can specify a custom plugin directory by passing it as the argument
+"   - e.g. `call plug#begin('~/.vim/plugged')`
+"   - Avoid using standard Vim directory names like 'plugin'
+
+" Make sure you use single quotes
+
+" Shorthand notation; fetches https://github.com/junegunn/vim-easy-align
+"Plug 'junegunn/vim-easy-align'
+
+" Any valid git URL is allowed
+"Plug 'https://github.com/junegunn/vim-github-dashboard.git'
+
+" Multiple Plug commands can be written in a single line using | separators
+Plug 'SirVer/ultisnips'
+"Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+" On-demand loading
+"Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
+"Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
+
+" Using a non-default branch
+"Plug 'rdnetto/YCM-Generator', { 'branch': 'stable' }
+
+" Using a tagged release; wildcard allowed (requires git 1.9.2 or above)
+"Plug 'fatih/vim-go', { 'tag': '*' }
+
+" Plugin options
+"Plug 'nsf/gocode', { 'tag': 'v.20150303', 'rtp': 'vim' }
+
+" Plugin outside ~/.vim/plugged with post-update hook
+"Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+" Unmanaged plugin (manually installed and updated)
+"Plug '~/my-prototype-plugin'
+" File navigation
+Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+Plug 'Xuyuanp/nerdtree-git-plugin'
+
+" Taglist
+Plug 'majutsushi/tagbar', { 'on': 'TagbarOpenAutoClose' }
+
+" Error checking
+Plug 'w0rp/ale'
+
+" Auto Complete
+Plug 'Valloric/YouCompleteMe'
+
+" Undo Tree
+Plug 'mbbill/undotree/'
+
+" Other visual enhancement
+Plug 'nathanaelkane/vim-indent-guides'
+Plug 'itchyny/vim-cursorword'
+
+" Git
+Plug 'rhysd/conflict-marker.vim'
+Plug 'tpope/vim-fugitive'
+Plug 'mhinz/vim-signify'
+Plug 'gisphm/vim-gitignore', { 'for': ['gitignore', 'vim-plug'] }
+
+" HTML, CSS, JavaScript, PHP, JSON, etc.
+Plug 'elzr/vim-json'
+Plug 'hail2u/vim-css3-syntax'
+Plug 'spf13/PIV', { 'for' :['php', 'vim-plug'] }
+Plug 'gko/vim-coloresque', { 'for': ['vim-plug', 'php', 'html', 'javascript', 'css', 'less'] }
+Plug 'pangloss/vim-javascript', { 'for' :['javascript', 'vim-plug'] }
+Plug 'mattn/emmet-vim'
+
+" Python
+Plug 'vim-scripts/indentpython.vim'
+
+" Markdown
+Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install_sync() }, 'for' :['markdown', 'vim-plug'] }
+Plug 'dhruvasagar/vim-table-mode', { 'on': 'TableModeToggle' }
+Plug 'vimwiki/vimwiki'
+
+" Bookmarks
+Plug 'kshenoy/vim-signature'
+
+" Other useful utilities
+Plug 'terryma/vim-multiple-cursors'
+Plug 'junegunn/goyo.vim' " distraction free writing mode
+Plug 'tpope/vim-surround' " type ysks' to wrap the word with '' or type cs'` to change 'word' to `word`
+Plug 'godlygeek/tabular' " type ;Tabularize /= to align the =
+Plug 'gcmt/wildfire.vim' " in Visual mode, type i' to select all text in '', or type i) i] i} ip
+Plug 'scrooloose/nerdcommenter' " in <space>cc to comment a line
+
+" Dependencies
+Plug 'MarcWeber/vim-addon-mw-utils'
+Plug 'kana/vim-textobj-user'
+Plug 'fadein/vim-FIGlet'
+
+
+
+" Initialize plugin system
+call plug#end()
+let g:SnazzyTransparent = 1
+
+" ===
+" === NERDTree
+" ===
+map tt :NERDTreeToggle<CR>
+let NERDTreeMapOpenExpl = ""
+let NERDTreeMapUpdir = ""
+let NERDTreeMapUpdirKeepOpen = "l"
+let NERDTreeMapOpenSplit = ""
+let NERDTreeOpenVSplit = ""
+let NERDTreeMapActivateNode = "i"
+let NERDTreeMapOpenInTab = "o"
+let NERDTreeMapPreview = ""
+let NERDTreeMapCloseDir = "n"
+let NERDTreeMapChangeRoot = "y"
+
+
+" ==
+" == NERDTree-git
+" ==
+let g:NERDTreeIndicatorMapCustom = {
+    \ "Modified"  : "✹",
+    \ "Staged"    : "✚",
+    \ "Untracked" : "✭",
+    \ "Renamed"   : "➜",
+    \ "Unmerged"  : "═",
+    \ "Deleted"   : "✖",
+    \ "Dirty"     : "✗",
+    \ "Clean"     : "✔︎",
+    \ "Unknown"   : "?"
+    \ }
+
+
+" ===
+" === You Complete ME
+" ===
+nnoremap gd :YcmCompleter GoToDefinitionElseDeclaration<CR>
+nnoremap g/ :YcmCompleter GetDoc<CR>
+nnoremap gt :YcmCompleter GetType<CR>
+nnoremap gr :YcmCompleter GoToReferences<CR>
+let g:ycm_autoclose_preview_window_after_completion=0
+let g:ycm_autoclose_preview_window_after_insertion=1
+let g:ycm_use_clangd = 0
+let g:ycm_python_interpreter_path = "/bin/python3"
+let g:ycm_python_binary_path = "/bin/python3"
+
+
+" ===
+" === ale
+" ===
+let b:ale_linters = ['pylint']
+let b:ale_fixers = ['autopep8', 'yapf']
+
+
+" ===
+" === Taglist
+" ===
+map <silent> T :TagbarOpenAutoClose<CR>
+
+
+" ===
+" === MarkdownPreview
+" ===
+let g:mkdp_auto_start = 0
+let g:mkdp_auto_close = 1
+let g:mkdp_refresh_slow = 0
+let g:mkdp_command_for_global = 0
+let g:mkdp_open_to_the_world = 0
+let g:mkdp_open_ip = ''
+let g:mkdp_browser = 'chromium'
+let g:mkdp_echo_preview_url = 0
+let g:mkdp_browserfunc = ''
+let g:mkdp_preview_options = {
+    \ 'mkit': {},
+    \ 'katex': {},
+    \ 'uml': {},
+    \ 'maid': {},
+    \ 'disable_sync_scroll': 0,
+    \ 'sync_scroll_type': 'middle',
+    \ 'hide_yaml_meta': 1
+    \ }
+let g:mkdp_markdown_css = ''
+let g:mkdp_highlight_css = ''
+let g:mkdp_port = ''
+let g:mkdp_page_title = '「${name}」'
+
+
+" ===
+" === vim-table-mode
+" ===
+map <LEADER>tm :TableModeToggle<CR>
+
+" ===
+" === Python-syntax
+" ===
+let g:python_highlight_all = 1
+" let g:python_slow_sync = 0
+
+
+" ===
+" === vim-indent-guide
+" ===
+let g:indent_guides_guide_size = 1
+let g:indent_guides_start_level = 2
+let g:indent_guides_enable_on_vim_startup = 1
+let g:indent_guides_color_change_percent = 1
+silent! unmap <LEADER>ig
+autocmd WinEnter * silent! unmap <LEADER>ig
+
+
+" ===
+" === Goyo
+" ===
+map <LEADER>gy :Goyo<CR>
+
+
+" ===
+" === vim-signiture
+" ===
+let g:SignatureMap = {
+        \ 'Leader'             :  "m",
+        \ 'PlaceNextMark'      :  "m,",
+        \ 'ToggleMarkAtLine'   :  "m.",
+        \ 'PurgeMarksAtLine'   :  "dm-",
+        \ 'DeleteMark'         :  "dm",
+        \ 'PurgeMarks'         :  "dm/",
+        \ 'PurgeMarkers'       :  "dm?",
+        \ 'GotoNextLineAlpha'  :  "m<LEADER>",
+        \ 'GotoPrevLineAlpha'  :  "",
+        \ 'GotoNextSpotAlpha'  :  "m<LEADER>",
+        \ 'GotoPrevSpotAlpha'  :  "",
+        \ 'GotoNextLineByPos'  :  "",
+        \ 'GotoPrevLineByPos'  :  "",
+        \ 'GotoNextSpotByPos'  :  "mn",
+        \ 'GotoPrevSpotByPos'  :  "mp",
+        \ 'GotoNextMarker'     :  "",
+        \ 'GotoPrevMarker'     :  "",
+        \ 'GotoNextMarkerAny'  :  "",
+        \ 'GotoPrevMarkerAny'  :  "",
+        \ 'ListLocalMarks'     :  "m/",
+        \ 'ListLocalMarkers'   :  "m?"
+        \ }
+
+
+" ===
+" === Undotree
+" ===
+let g:undotree_DiffAutoOpen = 0
+map L :UndotreeToggle<CR>
+
+"关于代码片段的插件配置
+" Track the engine.
+" Plugin 'SirVer/ultisnips'
+" Snippets are separated from the engine. Add this if you want them:
+" Plugin 'honza/vim-snippets'
+"
+" " Trigger configuration. You need to change this to something other than
+" <tab> if you use one of the following:
+" - https://github.com/Valloric/YouCompleteMe
+" - https://github.com/nvim-lua/completion-nvim
+let g:UltiSnipsExpandTrigger="<c-e>"
+let g:UltiSnipsJumpForwardTrigger="<c-e>"
+let g:UltiSnipsJumpBackwardTrigger="<c-b>"
+"
+" " If you want :UltiSnipsEdit to split your window.纵向分屏显示编辑页
+let g:UltiSnipsEditSplit="vertical"
+"设置存储代码片段的位置
+let g:UltiSnipsSnippetDirectories = [$HOME.'.vim/Ultisnips/','Ultisnips']
+
+"color snazzy   "启用snazzy下的vim的snazzy主题
